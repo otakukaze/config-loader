@@ -1,0 +1,11 @@
+{
+  "strKey": "string value",
+  "intKey": 1000,
+  "boolKey": true,
+  "floatKey": 1.2345,
+  "strArr": ["arr1"],
+  "objKey": {
+    "name": "name"
+  },
+  "arrObj": [{"key": "val"}]
+}
