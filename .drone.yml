@@ -1,0 +1,18 @@
+kind: pipeline
+name: test-stable-version
+
+steps:
+  - name: test
+    image: golang:1
+    commands:
+      - go test
+
+---
+kind: pipeline
+name: test-rc-version
+
+steps:
+  - name: test
+    image: golang:rc
+    commands:
+      - go test

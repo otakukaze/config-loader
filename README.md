@@ -1,5 +1,7 @@
 # Config Loader
 
+[![Build Status](https://ci.trj.tw/api/badges/golang/config-loader/status.svg)](https://ci.trj.tw/golang/config-loader)
+
 ## Install
 ```
 go get -u git.trj.tw/golang/config-loader
@@ -9,6 +11,7 @@ go get -u git.trj.tw/golang/config-loader
 
 ### struct tag
 > default : default value define
+
 > length : use for slice type min default length
 
 ### support type
