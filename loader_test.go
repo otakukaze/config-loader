@@ -1,6 +1,7 @@
 package confloader
 
 import (
+	"os"
 	"reflect"
 	"testing"
 )
@@ -13,8 +14,8 @@ func TestLoad(t *testing.T) {
 		Key string `json:"key" yaml:"key" toml:"key"`
 	}
 	type Config struct {
-		StrKey   string   `json:"strKey" yaml:"strKey" toml:"strKey" default:"def value"`
-		IntKey   int      `json:"intKey" yaml:"intKey" toml:"intKey"`
+		StrKey   string   `json:"strKey" yaml:"strKey" toml:"strKey" default:"def value" env:"TEST_STR"`
+		IntKey   int      `json:"intKey" yaml:"intKey" toml:"intKey" env:"TEST_INT"`
 		BoolKey  bool     `json:"boolKey" yaml:"boolKey" toml:"boolKey"`
 		FloatKey float64  `json:"floatKey" yaml:"floatKey" toml:"floatKey"`
 		StrArr   []string `json:"strArr" yaml:"strArr" toml:"strArr" default:"arrval" length:"1"`
@@ -22,6 +23,9 @@ func TestLoad(t *testing.T) {
 		ObjKey   ObjKey   `json:"objKey" yaml:"objKey" toml:"objKey"`
 		ArrObj   []ArrObj `json:"arrObj" yaml:"arrObj" toml:"arrObj"`
 	}
+
+	os.Setenv("TEST_STR", "string value2")
+	os.Setenv("TEST_INT", "2000")
 
 	expected := Config{
 		StrKey:   "string value",
@@ -35,8 +39,20 @@ func TestLoad(t *testing.T) {
 		},
 		ArrObj: []ArrObj{{Key: "val"}},
 	}
+	expectedWithEnv := Config{
+		StrKey:   "string value2",
+		IntKey:   2000,
+		BoolKey:  true,
+		FloatKey: 1.2345,
+		StrArr:   []string{"arr1"},
+		StrArr2:  []string{"arrval2", "arrval2"},
+		ObjKey: ObjKey{
+			Name: "name",
+		},
+		ArrObj: []ArrObj{{Key: "val"}},
+	}
 
-	src := Config{}
+	// src := Config{}
 
 	type args struct {
 		i    interface{}
@@ -51,7 +67,7 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load json file with default",
 			args: args{
-				i: &src,
+				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeJSON,
@@ -64,7 +80,7 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load yaml file with default",
 			args: args{
-				i: &src,
+				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeYAML,
@@ -77,12 +93,26 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load toml file with default",
 			args: args{
-				i: &src,
+				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeTOML,
 						Path: "./test/config.toml",
 					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "test load json file with default and env",
+			args: args{
+				i: &Config{},
+				opts: &LoadOptions{
+					ConfigFile: &ConfigFile{
+						Type: ConfigFileTypeJSON,
+						Path: "./test/config.json",
+					},
+					FromEnv: true,
 				},
 			},
 			wantErr: false,
@@ -93,8 +123,14 @@ func TestLoad(t *testing.T) {
 			if err := Load(tt.args.i, tt.args.opts); (err != nil) != tt.wantErr {
 				t.Errorf("Load() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if !reflect.DeepEqual(src, expected) {
-				t.Errorf("Load and expected not match")
+			if tt.args.opts != nil && tt.args.opts.FromEnv {
+				if !reflect.DeepEqual(tt.args.i, expectedWithEnv) {
+					t.Errorf("Load and expected not match")
+				}
+			} else {
+				if !reflect.DeepEqual(tt.args.i, expected) {
+					t.Errorf("Load and expected not match")
+				}
 			}
 		})
 	}
