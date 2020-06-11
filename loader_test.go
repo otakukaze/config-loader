@@ -67,7 +67,6 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load json file with default",
 			args: args{
-				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeJSON,
@@ -80,7 +79,6 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load yaml file with default",
 			args: args{
-				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeYAML,
@@ -93,7 +91,6 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load toml file with default",
 			args: args{
-				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeTOML,
@@ -106,7 +103,6 @@ func TestLoad(t *testing.T) {
 		{
 			name: "test load json file with default and env",
 			args: args{
-				i: &Config{},
 				opts: &LoadOptions{
 					ConfigFile: &ConfigFile{
 						Type: ConfigFileTypeJSON,
@@ -120,15 +116,17 @@ func TestLoad(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			src := Config{}
+			tt.args.i = &src
 			if err := Load(tt.args.i, tt.args.opts); (err != nil) != tt.wantErr {
 				t.Errorf("Load() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.args.opts != nil && tt.args.opts.FromEnv {
-				if !reflect.DeepEqual(tt.args.i, expectedWithEnv) {
+				if !reflect.DeepEqual(src, expectedWithEnv) {
 					t.Errorf("Load and expected not match")
 				}
 			} else {
-				if !reflect.DeepEqual(tt.args.i, expected) {
+				if !reflect.DeepEqual(src, expected) {
 					t.Errorf("Load and expected not match")
 				}
 			}
