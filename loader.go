@@ -9,6 +9,7 @@ import (
 
 	"git.trj.tw/golang/utils"
 	"github.com/BurntSushi/toml"
+	"github.com/otakukaze/envconfig"
 	"gopkg.in/yaml.v2"
 )
 
@@ -27,6 +28,7 @@ type ConfigFile struct {
 
 type LoadOptions struct {
 	ConfigFile *ConfigFile
+	FromEnv    bool
 }
 
 func Load(i interface{}, opts *LoadOptions) error {
@@ -50,48 +52,51 @@ func Load(i interface{}, opts *LoadOptions) error {
 		return nil
 	}
 
-	// no config file
-	if opts.ConfigFile == nil {
-		return nil
-	}
+	// load config file
+	if opts.ConfigFile != nil {
+		if opts.ConfigFile.Path == "" {
+			return errors.New("config file path empty")
+		}
 
-	if opts.ConfigFile.Path == "" {
-		return errors.New("config file path empty")
-	}
+		// resolve file path
+		opts.ConfigFile.Path = utils.ParsePath(opts.ConfigFile.Path)
+		// check file exists
+		if !utils.CheckExists(opts.ConfigFile.Path, false) {
+			return errors.New("config file not found")
+		}
 
-	// resolve file path
-	opts.ConfigFile.Path = utils.ParsePath(opts.ConfigFile.Path)
-	// check file exists
-	if !utils.CheckExists(opts.ConfigFile.Path, false) {
-		return errors.New("config file not found")
-	}
-
-	filebyte, err := ioutil.ReadFile(opts.ConfigFile.Path)
-	if err != nil {
-		return err
-	}
-
-	switch opts.ConfigFile.Type {
-	case ConfigFileTypeJSON:
-		err := json.Unmarshal(filebyte, i)
+		filebyte, err := ioutil.ReadFile(opts.ConfigFile.Path)
 		if err != nil {
 			return err
 		}
-		break
-	case ConfigFileTypeTOML:
-		err := toml.Unmarshal(filebyte, i)
-		if err != nil {
-			return err
+
+		switch opts.ConfigFile.Type {
+		case ConfigFileTypeJSON:
+			err := json.Unmarshal(filebyte, i)
+			if err != nil {
+				return err
+			}
+			break
+		case ConfigFileTypeTOML:
+			err := toml.Unmarshal(filebyte, i)
+			if err != nil {
+				return err
+			}
+			break
+		case ConfigFileTypeYAML:
+			err := yaml.Unmarshal(filebyte, i)
+			if err != nil {
+				return err
+			}
+			break
+		default:
+			return errors.New("file type not impl")
 		}
-		break
-	case ConfigFileTypeYAML:
-		err := yaml.Unmarshal(filebyte, i)
-		if err != nil {
-			return err
-		}
-		break
-	default:
-		return errors.New("file type not impl")
+	}
+
+	// load config from env
+	if opts.FromEnv {
+		envconfig.Parse(i)
 	}
 
 	return nil
