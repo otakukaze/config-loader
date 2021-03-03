@@ -1,4 +1,4 @@
-module git.trj.tw/golang/config-loader
+module github.com/otakukaze/config-loader
 
 go 1.14
 
