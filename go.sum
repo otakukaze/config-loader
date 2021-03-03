@@ -1,10 +1,8 @@
-git.trj.tw/golang/utils v0.0.0-20190225142552-b019626f0349 h1:V6ifeiJ3ExnjaUylTOz37n6z5uLwm6fjKjnztbTCaQI=
-git.trj.tw/golang/utils v0.0.0-20190225142552-b019626f0349/go.mod h1:yE+qbsUsijCTdwsaQRkPT1CXYk7ftMzXsCaaYx/0QI0=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/otakukaze/envconfig v1.0.4 h1:/rZ8xq1vFpgWzqsqUkk61doDGNv9pIXqrog/mCvSx8Y=
 github.com/otakukaze/envconfig v1.0.4/go.mod h1:v2dNv5NX1Lakw3FTAkbxYURyaiOy68M8QpMTZz+ogfs=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
-gopkg.in/yaml.v2 v2.3.0 h1:clyUAQHOM3G0M3f5vQj7LuJrETvjVot3Z5el9nffUtU=
-gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
+gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
