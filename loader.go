@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"strconv"
 
-	"git.trj.tw/golang/utils"
 	"github.com/BurntSushi/toml"
 	"github.com/otakukaze/envconfig"
 	"gopkg.in/yaml.v2"
@@ -59,9 +58,9 @@ func Load(i interface{}, opts *LoadOptions) error {
 		}
 
 		// resolve file path
-		opts.ConfigFile.Path = utils.ParsePath(opts.ConfigFile.Path)
+		opts.ConfigFile.Path = ParsePath(opts.ConfigFile.Path)
 		// check file exists
-		if !utils.CheckExists(opts.ConfigFile.Path, false) {
+		if !CheckExists(opts.ConfigFile.Path, false) {
 			return errors.New("config file not found")
 		}
 
