@@ -1,6 +1,11 @@
 # Change log
 
-## 2020-06-11 (v1.0.1
+## 2021-03-03 (v1.0.2)
+
+ - remove external utils
+ - change package name
+
+## 2020-06-11 (v1.0.1)
 
  - add load from env options
 
